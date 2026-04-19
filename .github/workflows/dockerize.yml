@@ -28,5 +28,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/controlv2:latest
-            ghcr.io/${{ github.actor }}/controlv2:${{ github.sha }}
+            ghcr.io/${{ github.actor | lower }}/ControlV2:latest
+            ghcr.io/${{ github.actor | lower }}/ControlV2:${{ github.sha }}
