@@ -28,5 +28,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/ControlV2:latest
-            ghcr.io/${{ github.actor }}/ControlV2:${{ github.sha }}
+            ghcr.io/cedarwoodtree/controlv2:latest
+            ghcr.io/cedarwoodtree/controlv2:${{ github.sha }}
