@@ -29,4 +29,3 @@ jobs:
           push: true
           tags: |
             ghcr.io/cedarwoodtree/controlv2:latest
-            ghcr.io/cedarwoodtree/controlv2:${{ github.sha }}
