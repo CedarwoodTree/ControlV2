@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* https://stackoverflow.com/questions/11660710/css-transition-fade-in*/
+
+.fade-in {
+    opacity: 1;
+    animation-name: fadeIn;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 1.25s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    background-color: black;
+}
