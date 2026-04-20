@@ -11,8 +11,6 @@ class GoveeHandler {
 
     try {
       for (const [id, info] of Object.entries(devices)) {
-        // console.log(id, info);
-
         if (info?.type && info.type === 'devices.types.light') {
           const payload = {
             sku: info.sku || '',
@@ -35,6 +33,7 @@ class GoveeHandler {
 
           if (response && response.ok) {
             const responseData = await response.json();
+
             let deviceStatus = {};
 
             if (responseData && responseData?.payload?.capabilities) {

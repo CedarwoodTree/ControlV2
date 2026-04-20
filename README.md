@@ -1,4 +1,4 @@
-# Control V2 (aegon)
+# Control V2
 
 This is a basic webpage designed to communicate with the Govee API to toggle the power status of light devices.
 

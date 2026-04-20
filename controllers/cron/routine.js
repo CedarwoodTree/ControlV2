@@ -47,8 +47,6 @@ async function refreshDevicelists() {
   }
 }
 
-export { refreshDevicelists };
-
 // Daily at midnight
 cron.schedule('0 0 * * *', async () => {
   console.log('Running daily cron at midnight...');
@@ -59,3 +57,5 @@ cron.schedule('0 0 * * *', async () => {
     console.error('Daily cron failed:', error);
   }
 });
+
+export { refreshDevicelists };

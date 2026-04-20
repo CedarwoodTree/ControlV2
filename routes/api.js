@@ -4,6 +4,8 @@ import Key from '../controllers/db/models/key.js';
 import Devicelist from '../controllers/db/models/devicelist.js';
 import GoveeHandler from '../controllers/GoveeHandler.js';
 import db from '../controllers/db/db.js';
+import devicelist from '../controllers/db/models/devicelist.js';
+import key from '../controllers/db/models/key.js';
 
 const router = Router();
 
@@ -151,6 +153,73 @@ router.get('/refresh-devices', async (req, res) => {
     }
 
     return res.sendStatus(500);
+  } catch (e) {
+    if (process.env.APP_ENV === 'development') {
+      console.log(e);
+    }
+    return res.sendStatus(500);
+  }
+});
+
+router.post('/device-status', async (req, res) => {
+  const payload = {
+    device_id: req.body.device_id || null,
+    devicelist_id: req.body.devicelist_id || null,
+    key_id: req.body.key_id || null,
+  };
+
+  if (
+    !payload.device_id ||
+    !payload.devicelist_id ||
+    isNaN(payload.devicelist_id) ||
+    !payload.key_id ||
+    isNaN(payload.key_id)
+  ) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    const deviceList = await devicelist.getDeviceList(payload.key_id);
+    const keyFetch = db
+      .prepare('SELECT content FROM key WHERE key_id = ? LIMIT 1')
+      .all(payload.key_id);
+
+    if (deviceList && Array.isArray(deviceList)) {
+      const content = JSON.parse(deviceList[0]?.content); // Must Filter by Device ID
+      const keyContent = keyFetch[0]?.content;
+
+      if (!content || content.length === 0 || !keyContent || keyContent.length === 0) {
+        return res.sendStatus(500);
+      }
+
+      let foundDevice = false;
+      const NewDevicelist = {};
+
+      for (const [k, v] of Object.entries(content)) {
+        if (k.toString() === payload.device_id.toString()) {
+          NewDevicelist[k] = v;
+          foundDevice = true;
+          break;
+        }
+      }
+
+      if (!foundDevice) {
+        return res.sendStatus(500);
+      }
+
+      const deviceStatus = await GoveeHandler.insertDeviceStatus(
+        NewDevicelist,
+        keyContent
+      );
+
+      if (deviceStatus) {
+        return res.json(deviceStatus);
+      } else {
+        return res.sendStatus(500);
+      }
+    } else {
+      return res.sendStatus(500);
+    }
   } catch (e) {
     if (process.env.APP_ENV === 'development') {
       console.log(e);
