@@ -20,21 +20,16 @@ This webpage also has:
 
 ```yaml
 services:
-  control:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: control
+  controlv2:
+    image: ghcr.io/cedarwoodtree/controlv2:latest
+    container_name: controlv2
     restart: unless-stopped
     ports:
       - "4000:4000"
-    env_file:
-      - .env
+    environment:
+      APP_ENV: "production"
     volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/dist
-
+      - ./data:/app/data
 ```
 
 
