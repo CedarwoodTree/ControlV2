@@ -1,4 +1,5 @@
 <script setup>
+// Imports
 import { ArrowLeftIcon, LightBulbIcon } from '@heroicons/vue/24/solid';
 import { useRouter } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
@@ -6,6 +7,7 @@ import Modal from '@/components/Modal.vue';
 
 const router = useRouter();
 
+// Props
 const props = defineProps({
   id: {
     type: [String, Number],
@@ -13,6 +15,7 @@ const props = defineProps({
   },
 });
 
+// General Refs
 const showModal = ref(false);
 const modalInfo = ref({
   db: true,
@@ -21,11 +24,14 @@ const modalInfo = ref({
   sku: null,
   status: '',
 });
-
 const Devices = ref([]);
-
 const DevicesLoaded = ref(false); // MUST BE FALSE
 
+/*
+  Load Devices
+  ------------
+  Loads cached list of devices from backend
+ */
 const loadDevices = async () => {
   try {
     const response = await fetch(`/api/devices/${props.id}`);
@@ -99,6 +105,11 @@ const cssColor = computed(() => {
   return `rgb(${r}, ${g}, ${b})`;
 });
 
+/*
+  Grab Device Status
+  -------------
+  Grabs the power state of device from the backend
+ */
 const fetchDeviceStatus = async (devicelist_id, device_id, key_id, device_name) => {
   deviceStatusInfo.value = deviceStatusDefaults(); // Reset Values to Default
   deviceStatusInfo.value.name = device_name;
@@ -160,6 +171,11 @@ const hideDeviceStatusModal = () => {
   deviceStatusInfo.value = deviceStatusDefaults();
 };
 
+/*
+  Toggle Device
+  -------------
+  Requests on/off status from backend
+ */
 const toggleDevice = async () => {
   modalInfo.value.status = 'Sending request to Govee..';
   const payload = {
@@ -202,6 +218,7 @@ const returnHome = () => {
   router.push('/');
 };
 
+// Mount Methods
 onMounted(() => {
   loadDevices();
 });
@@ -293,7 +310,7 @@ onMounted(() => {
       <h2 class="text-2xl my-2">Lights</h2>
       <h2 class="text-white/70 mb-2">
         These are your Govee lights as of
-        <strong>{{ new Date(Devices[0]?.last_updated).toLocaleString() }}</strong
+        <strong>{{ new Date(Devices[0]?.last_updated).toLocaleString('en-US') }}</strong
         >.
       </h2>
       <div
@@ -323,25 +340,36 @@ onMounted(() => {
                 Off
               </button>
             </div>
-            <button
-              v-if="v.type === 'devices.types.light'"
-              class="bg-gray-700 w-62 rounded shadow hover:bg-gray-800 hover:cursor-pointer"
-              @click="
-                fetchDeviceStatus(Devices[0].devicelist_id, k, props.id, v.deviceName)
-              "
-            >
-              {{
-                deviceStatusInfo.name === v.deviceName
-                  ? deviceStatusInfo.state
-                  : 'Light Status'
-              }}
-            </button>
+
+            <!-- Light DeviceType Capabilities -->
+            <div v-if="v.type === 'devices.types.light'" class="flex flex-row gap-2">
+              <button
+                class="bg-gray-700 w-30 rounded shadow hover:bg-gray-800 hover:cursor-pointer"
+                @click="
+                  fetchDeviceStatus(Devices[0].devicelist_id, k, props.id, v.deviceName)
+                "
+              >
+                {{
+                  deviceStatusInfo.name === v.deviceName
+                    ? deviceStatusInfo.state
+                    : 'Light Status'
+                }}
+              </button>
+              <button
+                class="bg-sky-400 w-30 rounded shadow hover:bg-sky-500 hover:cursor-pointer"
+              >
+                Change Color
+              </button>
+            </div>
           </div>
 
-          <div class="flex flex-row gap-2 items-center hidden md:flex">
-            <p class="text-white/70"><strong>Type:</strong> {{ v.type || 'Light' }}</p>
-            <p class="text-white/70"><strong>sku:</strong> {{ v.sku || 'unknown' }}</p>
-            <p class="text-white/70"><strong>mac:</strong> {{ k || 'unknown' }}</p>
+          <div class="flex flex-row gap-2 items-center hidden lg:flex">
+            <p class="text-white/70">
+              <strong>Type:</strong>
+              {{ v.type ? v.type.toString().split('.')[2] : 'light' }}
+            </p>
+            <p class="text-white/70"><strong>Sku:</strong> {{ v.sku || 'unknown' }}</p>
+            <p class="text-white/70"><strong>Mac:</strong> {{ k || 'unknown' }}</p>
           </div>
         </div>
       </div>

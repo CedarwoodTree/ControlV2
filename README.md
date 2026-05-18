@@ -32,7 +32,6 @@ services:
       - ./data:/app/data
 ```
 
-
 ## Project Setup (Non-Docker)
 
 ```sh

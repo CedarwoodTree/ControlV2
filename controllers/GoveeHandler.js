@@ -1,5 +1,9 @@
 import crypto from 'crypto';
 
+/*
+  Module Interacts with the Govee API
+  -----------------------------------
+ */
 class GoveeHandler {
   static async insertDeviceStatus(devices, token) {
     if (!devices) {
@@ -61,6 +65,11 @@ class GoveeHandler {
     }
   }
 
+  /*
+    List Devices
+    ------------
+    Grabs device list for token
+   */
   static async listDevices(token) {
     const apiUrl = 'https://openapi.api.govee.com/router/api/v1/user/devices';
     const res = await fetch(apiUrl, {
@@ -97,6 +106,11 @@ class GoveeHandler {
     }
   }
 
+  /*
+    Toggle Device
+    -------------
+    Toggles the device power state
+   */
   static async toggleDevice(device, token, db = false) {
     if (!device) {
       return;
