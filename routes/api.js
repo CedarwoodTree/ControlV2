@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { refreshDevicelists } from '../controllers/cron/routine.js';
-import Key from '../controllers/db/models/key.js';
-import Devicelist from '../controllers/db/models/devicelist.js';
 import GoveeHandler from '../controllers/GoveeHandler.js';
 import db from '../controllers/db/db.js';
-import devicelist from '../controllers/db/models/devicelist.js';
-import key from '../controllers/db/models/key.js';
+// Import DB Models
+import Devicelist from '../controllers/db/models/devicelist.js';
+import Key from '../controllers/db/models/key.js';
+import Starred from '../controllers/db/models/starred.js';
 
 const router = Router();
 
@@ -220,6 +220,74 @@ router.post('/device-status', async (req, res) => {
     } else {
       return res.sendStatus(500);
     }
+  } catch (e) {
+    if (process.env.APP_ENV === 'development') {
+      console.log(e);
+    }
+    return res.sendStatus(500);
+  }
+});
+
+/*
+  Starred Routes
+  =============================
+ */
+
+/*
+  Get Starred
+  -----------
+  Grabs array of starred devices from db for key
+ */
+router.get('/starred/:id', async (req, res) => {
+  // Grab & loosely validate url param
+  const key_id = req.params.id ? Number(req.params.id) : null;
+
+  if (!key_id || isNaN(key_id)) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    const rows = await Starred.findAll(key_id);
+
+    if (rows && Array.isArray(rows) && rows.length > 0) {
+      return res.json(rows);
+    }
+
+    return res.json([]);
+  } catch (e) {
+    if (process.env.APP_ENV === 'development') {
+      console.log(e);
+    }
+    return res.sendStatus(500);
+  }
+});
+
+/*
+  Create Star
+  -----------
+  Creates a starred entry in db
+ */
+router.post('/starred/create', async (req, res) => {
+  // Grab and loosely validate body
+  const key_id = req.body.key_id ? Number(req.body.key_id) : null;
+  const device_id = req.params.device_id || null;
+
+  if (!key_id || isNaN(key_id) || !device_id) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    // Create starred
+    const result = await Starred.insert({
+      key_id: key_id,
+      device_id: device_id,
+    });
+
+    if (result) {
+      return res.sendStatus(200); // Success 200
+    }
+
+    return res.sendStatus(500);
   } catch (e) {
     if (process.env.APP_ENV === 'development') {
       console.log(e);

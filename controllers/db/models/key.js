@@ -69,6 +69,31 @@ class Key {
       }
     }
   }
+
+  /*
+    Find Key
+    --------
+    Returns key from db based on key_id OR ``null``
+   */
+  static async findOne(key_id) {
+    if (!key_id || isNaN(key_id)) {
+      return;
+    }
+
+    try {
+      // Query db
+      const rows = db.prepare('SELECT * FROM key WHERE key_id = ? LIMIT 1').all();
+
+      // Validate return data
+      if (rows && Array.isArray(rows) && rows.length > 0) {
+        return rows;
+      }
+    } catch (e) {
+      if (process.env.APP_ENV === 'development') {
+        console.log(e);
+      }
+    }
+  }
 }
 
 export default Key;

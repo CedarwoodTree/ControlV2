@@ -356,7 +356,7 @@ onMounted(() => {
                 }}
               </button>
               <button
-                class="bg-sky-400 w-30 rounded shadow hover:bg-sky-500 hover:cursor-pointer"
+                class="bg-blue-400 w-30 rounded shadow hover:bg-blue-500 hover:cursor-pointer"
               >
                 Change Color
               </button>

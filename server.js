@@ -23,7 +23,6 @@ const port = 4000;
 // Import Routes
 import apiRoutes from './routes/api.js';
 
-app.use(express.json()); // Parse JSON requests
 app.use(express.json({ limit: '100mb' })); //Set File Upload Size Limit
 app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Parse form data
 
