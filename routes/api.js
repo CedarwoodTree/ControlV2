@@ -179,7 +179,7 @@ router.post('/device-status', async (req, res) => {
   }
 
   try {
-    const deviceList = await devicelist.getDeviceList(payload.key_id);
+    const deviceList = await Devicelist.getDeviceList(payload.key_id);
     const keyFetch = db
       .prepare('SELECT content FROM key WHERE key_id = ? LIMIT 1')
       .all(payload.key_id);
@@ -238,7 +238,7 @@ router.post('/device-status', async (req, res) => {
   -----------
   Grabs array of starred devices from db for key
  */
-router.get('/starred/:id', async (req, res) => {
+router.get('/starred/all/:id', async (req, res) => {
   // Grab & loosely validate url param
   const key_id = req.params.id ? Number(req.params.id) : null;
 
@@ -270,7 +270,7 @@ router.get('/starred/:id', async (req, res) => {
 router.post('/starred/create', async (req, res) => {
   // Grab and loosely validate body
   const key_id = req.body.key_id ? Number(req.body.key_id) : null;
-  const device_id = req.params.device_id || null;
+  const device_id = req.body.device_id || null;
 
   if (!key_id || isNaN(key_id) || !device_id) {
     return res.sendStatus(400);
@@ -294,6 +294,47 @@ router.post('/starred/create', async (req, res) => {
     }
     return res.sendStatus(500);
   }
+});
+
+/*
+  Delete Star
+  -----------
+  Deletes a starred entry in db
+ */
+router.post('/starred/delete', async (req, res) => {
+  // Grab and loosely validate body
+  const device_id = req.body.device_id || null;
+
+  if (!device_id) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    // Delete Starred
+    const result = await Starred.delete(device_id);
+
+    if (result) {
+      return res.sendStatus(200);
+    }
+
+    return res.sendStatus(500);
+  } catch (e) {
+    if (process.env.APP_ENV === 'development') {
+      console.log(e);
+    }
+    return res.sendStatus(500);
+  }
+});
+
+/*
+  General Info
+  ------------
+  Will eventually return important versions and whatnot to client (next update)
+ */
+router.get('/info', async (req, res) => {
+  return res.json({
+    ping: 'pong',
+  });
 });
 
 export default router;

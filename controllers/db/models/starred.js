@@ -38,7 +38,9 @@ class Starred {
     }
 
     try {
-      const rows = db.prepare('SELECT * FROM starred WHERE device_id=? LIMIT 1').all();
+      const rows = db
+        .prepare('SELECT * FROM starred WHERE device_id=? LIMIT 1')
+        .all(device_id);
       if (rows && Array.isArray(rows) && rows.length > 0) {
         return rows;
       }

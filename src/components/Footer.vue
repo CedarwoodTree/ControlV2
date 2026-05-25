@@ -1,4 +1,8 @@
 <script setup>
+// Imports
+import { LinkIcon } from '@heroicons/vue/24/solid';
+
+// Define Props
 const props = defineProps({
   config: {
     type: Object,
@@ -13,9 +17,17 @@ const props = defineProps({
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h3 class="text-white text-lg font-bold mb-4">{{ props.config.title }}</h3>
-          <p class="text-sm">
+          <p class="text-sm mb-2">
             {{ props.config.description }}
           </p>
+          <div class="flex flex-row items-center gap-2 animate-pulse">
+            <a
+              href="https://github.com/CedarwoodTree/ControlV2"
+              class="text-sm hover:underline"
+              >View More on <strong>Github</strong></a
+            >
+            <LinkIcon class="size-4" />
+          </div>
         </div>
 
         <!-- Column 2: Links -->

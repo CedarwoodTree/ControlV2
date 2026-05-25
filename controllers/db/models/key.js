@@ -82,7 +82,7 @@ class Key {
 
     try {
       // Query db
-      const rows = db.prepare('SELECT * FROM key WHERE key_id = ? LIMIT 1').all();
+      const rows = db.prepare('SELECT * FROM key WHERE key_id = ? LIMIT 1').all(key_id);
 
       // Validate return data
       if (rows && Array.isArray(rows) && rows.length > 0) {

@@ -16,10 +16,11 @@ onMounted(() => {
       <div
         class="flex-1 h-50 bg-sky-400/70 rounded shadow-2xl hover:border-2 hover:border-sky-100 p-2 fade-in"
       >
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-2 mb-2">
           <InformationCircleIcon class="size-7 text-white" />
           <h5 class="mt-1 text-center font-bold">Information</h5>
         </div>
+        <p>This about page will be worked on in the next update.</p>
       </div>
       <div
         class="flex-1 h-50 bg-sky-400/70 rounded shadow-2xl hover:border-2 hover:border-sky-100 p-2 fade-in"
