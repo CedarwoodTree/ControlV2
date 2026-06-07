@@ -584,20 +584,21 @@ onMounted(() => {
         </h2>
       </div>
 
-      <div class="flex flex-row gap-1 items-center" v-if="starredList.length > 0">
+      <div class="flex flex-row gap-1 items-center mb-4" v-if="starredList.length > 0">
         <button
-          class="w-1/2 bg-green-400 rounded border-1 border-sky-600 hover:cursor-pointer"
+          class="w-1/2 bg-green-400 rounded border border-sky-600 hover:cursor-pointer"
           @click="displayToggleStarredModal(true)"
         >
           On
         </button>
         <button
-          class="w-1/2 bg-red-400 rounded border-1 border-sky-600 hover:cursor-pointer"
+          class="w-1/2 bg-red-400 rounded border border-sky-600 hover:cursor-pointer"
           @click="displayToggleStarredModal(false)"
         >
           Off
         </button>
       </div>
+
       <h2 class="text-2xl my-2">Lights</h2>
       <h2 class="text-white/70 mb-2">
         These are your Govee lights as of
@@ -610,11 +611,11 @@ onMounted(() => {
         class="fade-in flex flex-col gap-3 hover:bg-gray-800"
       >
         <div
-          class="flex flex-row border-b-1 border-sky-400 p-1 items-center"
+          class="flex flex-row border-b border-sky-400 p-1 items-center"
           :class="{ 'border-yellow-400': isStarred(k) }"
         >
           <StarIcon
-            class="size-6 me-1 hover:cursor-pointer hover:border-1 rounded"
+            class="size-6 me-1 hover:cursor-pointer hover:border rounded"
             @click="starDevice(k)"
             :class="{ 'text-yellow-400': isStarred(k), 'text-gray-400': !isStarred(k) }"
           ></StarIcon>
